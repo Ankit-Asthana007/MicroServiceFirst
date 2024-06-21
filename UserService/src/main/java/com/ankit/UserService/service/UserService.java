@@ -26,14 +26,18 @@ public class UserService {
     @Autowired
     private HotelService hotelService;
 
+    @Autowired
+    private RatingService ratingService;
+
     public User saveUser(User user) {
         return userRepo.save(user);
     }
 
     public User getUserById(String id) {
         User user =  userRepo.findById(id).orElseThrow(() -> new UserException("User not found for the given userid !!" + id));
-        //here we fetch the ratings for the user
-        Rating[] ratingsOfUser1 = restTemplate.getForObject("http://localhost:8083/rating/user/" + user.getId(), Rating[].class);
+        //here we fetch the ratings for the useR
+//        Rating[] ratingsOfUser1 = restTemplate.getForObject("http://localhost:8083/rating/user/" + user.getId(), Rating[].class);
+        Rating[] ratingsOfUser1 = ratingService.getRatingByUserId(user.getId());
         List<Rating> ratingList =Arrays.stream(ratingsOfUser1).toList();
 //        Rating[] ratingsOfUser = restTemplate.getForObject("http://rating-service/rating/user/" + user.getId(), Rating[].class); //using service call
 //        List<Rating> ratingList = Arrays.stream(ratingsOfUser).toList();
